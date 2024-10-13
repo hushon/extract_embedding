@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "extract_embedding"
+version = "0.1.0"
+description = "A library for extracting embeddings"
+authors = [
+    { name = "Hyounguk Shon", email = "hyounguk.shon@kaist.ac.kr" }
+]
+dependencies = [
+    "torch",
+]
+
+[project.urls]
+homepage = "https://github.com/hushon/extract_embedding"
