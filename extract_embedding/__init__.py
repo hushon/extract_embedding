@@ -31,15 +31,14 @@ class ExtractEmbedding:
         The gradient tracking for the extracted data is controlled by the `enable_grad` argument.
         If `enable_grad=False`, gradient tracking will be disabled for the extracted data.
     """
-    def __init__(self, layers: List[nn.Module], extract_input: bool = True, enable_grad: bool = False, 
+    def __init__(self, layers: List[nn.Module], extract_input: bool = True, 
                  apply_func: Optional[Callable] = None):
         # Ensure layers is a list of nn.Module instances
-        assert isinstance(layers, list) and all(isinstance(layer, nn.Module) for layer in layers), \
+        assert all(isinstance(layer, nn.Module) for layer in layers), \
             "layers must be a list of nn.Module instances"
 
         self.layers = layers  # List of layers
         self.extract_input = extract_input  # Whether to extract inputs (True) or outputs (False)
-        self.enable_grad = enable_grad  # Enable or disable gradient tracking
         self.apply_func = apply_func  # Optional post-processing function
         self.extracted_data = [None] * len(layers)  # Placeholder for storing extracted data
         self.hooks = []  # Placeholder for storing hooks
@@ -52,15 +51,14 @@ class ExtractEmbedding:
         return self
 
     def _save_embedding_hook(self, module, input, output, idx):
-        with torch.set_grad_enabled(self.enable_grad):  # controls whether gradients are tracked
-            # Extract input or output depending on extract_input flag
-            extracted = input if self.extract_input else output
-            
-            # Apply post-processing function if provided
-            if self.apply_func is not None:
-                extracted = self.apply_func(extracted)
-            
-            self.extracted_data[idx] = extracted  # Store the processed data
+        # Extract input or output depending on extract_input flag
+        extracted = input if self.extract_input else output
+        
+        # Apply post-processing function if provided
+        if self.apply_func is not None:
+            extracted = self.apply_func(extracted)
+        
+        self.extracted_data[idx] = extracted  # Store the processed data
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         # Remove all hooks when exiting the context manager
