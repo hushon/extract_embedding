@@ -10,7 +10,6 @@ class ExtractEmbedding:
     Args:
         layers (List[nn.Module]): The list of layers to extract input/output from.
         extract_input (bool): If True, extract input; otherwise, extract output.
-        enable_grad (bool): If True, enable gradient tracking; if False, disable gradient tracking.
         apply_func (Optional[Callable]): A function to apply to the extracted data for post-processing.
                                        If None, no post-processing will be applied.
 
