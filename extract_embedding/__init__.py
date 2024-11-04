@@ -19,9 +19,9 @@ class ExtractEmbedding:
     
     Example usage:
         def post_process_fn(data):
-            return data.mean(dim=0)  # Example post-processing function
+            return data.detach().mean(dim=0)  # Example post-processing function
 
-        with ExtractEmbedding(layers=[model.fc, model.conv], extract_input=True, enable_grad=False, apply_func=post_process_fn) as extractor:
+        with ExtractEmbedding(layers=[model.fc, model.conv], extract_input=True, apply_func=post_process_fn) as extractor:
             output = model(input)
         print(extractor.extracted_data[0].shape)  # First layer's input (after post-processing)
         print(extractor.extracted_data[1].shape)  # Second layer's input (after post-processing)
